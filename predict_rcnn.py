@@ -61,27 +61,27 @@ print("[INFO] proposal shape: {}".format(proposals.shape))
 # classify each of the proposal ROIs using fine-tuned model
 print("[INFO] classifying proposals...")
 proba = model.predict(proposals)
-print(proba)
+#print(proba)
 
 print("[INFO] applying NMS...")
 labels = lb.classes_[np.argmax(proba, axis=1)]
-print(labels)
-print(type(labels))
+#print(labels)
+#print(type(labels))
 idxs = np.where(labels == 'circ')[0]
-print(idxs)
+#print(idxs)
 
 boxes = boxes[idxs]
-print(boxes)
+#print(boxes)
 proba = proba[idxs][:, 0]
-print(proba)
+#print(proba)
 
 idxs = np.where(proba >= config.MIN_PROBA)
 boxes = boxes[idxs]
 proba = proba[idxs]
 
-print(idxs)
-print(boxes)
-print(proba)
+#print(idxs)
+#print(boxes)
+#print(proba)
 
 # loop over the bounding boxes and associated probabilities
 for (box, prob) in zip(boxes, proba):
