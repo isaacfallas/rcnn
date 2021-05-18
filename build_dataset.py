@@ -95,53 +95,53 @@ for (i, imagePath) in enumerate(imagePaths):
 			# boxes and unpack the ground-truth bounding box
 			iou = compute_iou(gtBox, proposedRect)
 			(gtStartX, gtStartY, gtEndX, gtEndY) = gtBox
+			if iou > 0.5: break
 
-			# initialize the ROI and output path
-			roi = None
-			outputPath = None
+		# initialize the ROI and output path
+		roi = None
+		outputPath = None
 
-			# check to see if the IOU is greater than 70% *and* that
-			# we have not hit our positive count limit
-			if iou > 0.85 and totalPositive < 1000 and positiveROIs <= config.MAX_POSITIVE:
-				# extract the ROI and then derive the output path to
-				# the positive instance
-				roi = image[propStartY:propEndY, propStartX:propEndX]
-				filename = "{}.png".format(totalPositive)
-				outputPath = os.path.sep.join([config.POSITVE_PATH,
-					filename])
+		#print(iou)
 
-				# increment the positive counters
-				positiveROIs += 1
-				totalPositive += 1
+		# check to see if the IOU is greater than 70% *and* that
+		# we have not hit our positive count limit
+		if iou > 0.5 and totalPositive < 1000 and positiveROIs <= config.MAX_POSITIVE:
+			# extract the ROI and then derive the output path to
+			# the positive instance
+			roi = image[propStartY:propEndY, propStartX:propEndX]
+			filename = "{}.png".format(totalPositive)
+			outputPath = os.path.sep.join([config.POSITVE_PATH, filename])
 
-			# determine if the proposed bounding box falls *within*
-			# the ground-truth bounding box
-			fullOverlap = propStartX >= gtStartX
-			fullOverlap = fullOverlap and propStartY >= gtStartY
-			fullOverlap = fullOverlap and propEndX <= gtEndX
-			fullOverlap = fullOverlap and propEndY <= gtEndY
+			# increment the positive counters
+			positiveROIs += 1
+			totalPositive += 1
 
-			# check to see if there is not full overlap *and* the IoU
-			# is less than 5% *and* we have not hit our negative
-			# count limit
-			if not fullOverlap and totalNegative < 1000 and iou < 0.01 and \
-				negativeROIs <= config.MAX_NEGATIVE:
-				# extract the ROI and then derive the output path to
-				# the negative instance
-				roi = image[propStartY:propEndY, propStartX:propEndX]
-				filename = "{}.png".format(totalNegative)
-				outputPath = os.path.sep.join([config.NEGATIVE_PATH,
-					filename])
+		# determine if the proposed bounding box falls *within*
+		# the ground-truth bounding box
+		fullOverlap = propStartX >= gtStartX
+		fullOverlap = fullOverlap and propStartY >= gtStartY
+		fullOverlap = fullOverlap and propEndX <= gtEndX
+		fullOverlap = fullOverlap and propEndY <= gtEndY
 
-				# increment the negative counters
-				negativeROIs += 1
-				totalNegative += 1
+		# check to see if there is not full overlap *and* the IoU
+		# is less than 5% *and* we have not hit our negative
+		# count limit
+		if not fullOverlap and totalNegative < 1000 and iou < 0.01 and \
+			negativeROIs <= config.MAX_NEGATIVE:
+			# extract the ROI and then derive the output path to
+			# the negative instance
+			roi = image[propStartY:propEndY, propStartX:propEndX]
+			filename = "{}.png".format(totalNegative)
+			outputPath = os.path.sep.join([config.NEGATIVE_PATH, filename])
 
-			# check to see if both the ROI and output path are valid
-			if roi is not None and outputPath is not None:
-				# resize the ROI to the input dimensions of the CNN
-				# that we'll be fine-tuning, then write the ROI to
-				# disk
-				roi = cv2.resize(roi, config.INPUT_DIMS,
-					interpolation=cv2.INTER_CUBIC)
-				cv2.imwrite(outputPath, roi)
+			# increment the negative counters
+			negativeROIs += 1
+			totalNegative += 1
+
+		# check to see if both the ROI and output path are valid
+		if roi is not None and outputPath is not None:
+			# resize the ROI to the input dimensions of the CNN
+			# that we'll be fine-tuning, then write the ROI to
+			# disk
+			roi = cv2.resize(roi, config.INPUT_DIMS, interpolation=cv2.INTER_CUBIC)
+			cv2.imwrite(outputPath, roi)
