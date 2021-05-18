@@ -1,36 +1,30 @@
 import cv2
+import os
 import numpy as np
+from include import config
+from imutils import paths
 from matplotlib import pyplot as plt
 
-img = cv2.imread("cancer_cells_001.tif",0)
 
+imagePaths = list(paths.list_images(config.ORIG_IMAGES))
 
 clahe = cv2.createCLAHE(clipLimit=24, tileGridSize=(8,8))
-cl1 = clahe.apply(img)
 
-#t, dst = cv2.threshold(cl1, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_TRIANGLE)
+for (i, imagePath) in enumerate(imagePaths):
 
-blur = cv2.medianBlur(cl1, 1)
-dst = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 41, 15)
-dst = cv2.medianBlur(dst, 9)
+    img = cv2.imread(imagePath,0)
 
-cv2.imwrite('clahe_img_001.jpg',cl1)
+    #cl1 = clahe.apply(img)
 
-cv2.imwrite('threshold_img_001.jpg', dst)
+    blur = cv2.medianBlur(img, 1)
+    dst = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 41, 15)
+    dst = cv2.medianBlur(dst, 9)
 
-cv2.imshow('Original image', img)
-cv2.imshow('CLAHE', cl1)
-#cv2.imshow('Blur', blur)
-cv2.imshow('Threshold', dst)
+    filename = "cells_{}.png".format(i+1)
 
-cv2.waitKey(0)
+    outPath = os.path.sep.join([config.ORIG_IMAGES_THRESHOLD, filename])
 
-
-
-
-
-
-
+    cv2.imwrite(outPath, dst)
 
 
 #cv2.imshow('Second image', img)

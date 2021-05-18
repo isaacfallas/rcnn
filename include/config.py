@@ -6,6 +6,7 @@ import os
 ORIG_BASE_PATH = "cells"
 ORIG_IMAGES = os.path.sep.join([ORIG_BASE_PATH, "images"])
 ORIG_ANNOTS = os.path.sep.join([ORIG_BASE_PATH, "annotations"])
+ORIG_IMAGES_THRESHOLD = os.path.sep.join([ORIG_BASE_PATH, "threshold_images"])
 
 # define the base path to the *new* dataset after running our dataset
 # builder scripts and then use the base path to derive the paths to
