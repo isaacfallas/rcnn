@@ -16,7 +16,12 @@ def compute_iou(boxA, boxB):
 	# compute the intersection over union by taking the intersection
 	# area and dividing it by the sum of prediction + ground-truth
 	# areas - the intersection area
-	iou = interArea / float(boxAArea + boxBArea - interArea)
-
+	#iou = interArea / float(boxAArea + boxBArea - interArea)
+	
+	try:
+		iou = interArea / float(boxAArea + boxBArea - interArea)
+	except ZeroDivisionError:
+		iou = 0.0
+	
 	# return the intersection over union value
 	return iou

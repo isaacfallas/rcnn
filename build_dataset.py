@@ -69,7 +69,7 @@ for (i, imagePath) in enumerate(imagePaths):
 	# proposed boxes
 	ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 	ss.setBaseImage(image)
-	ss.switchToSelectiveSearchFast()
+	ss.switchToSelectiveSearchQuality()
 	rects = ss.process()
 	proposedRects= []
 
@@ -90,12 +90,17 @@ for (i, imagePath) in enumerate(imagePaths):
 		(propStartX, propStartY, propEndX, propEndY) = proposedRect
 
 		# loop over the ground-truth bounding boxes
-		for gtBox in gtBoxes:
+		ious = []
+		for (i, gtBox) in enumerate(gtBoxes):
 			# compute the intersection over union between the two
 			# boxes and unpack the ground-truth bounding box
 			iou = compute_iou(gtBox, proposedRect)
+			ious.append(iou)
 			(gtStartX, gtStartY, gtEndX, gtEndY) = gtBox
-			if iou > 0.5: break
+			if iou > 0.6: 
+				break
+			if i == len(gtBoxes) - 1:
+				iou = max(ious)
 
 		# initialize the ROI and output path
 		roi = None
@@ -105,7 +110,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 		# check to see if the IOU is greater than 70% *and* that
 		# we have not hit our positive count limit
-		if iou > 0.5 and totalPositive < 1000 and positiveROIs <= config.MAX_POSITIVE:
+		if iou > 0.6 and totalPositive < 1000 and positiveROIs <= config.MAX_POSITIVE:
 			# extract the ROI and then derive the output path to
 			# the positive instance
 			roi = image[propStartY:propEndY, propStartX:propEndX]
@@ -126,12 +131,15 @@ for (i, imagePath) in enumerate(imagePaths):
 		# check to see if there is not full overlap *and* the IoU
 		# is less than 5% *and* we have not hit our negative
 		# count limit
-		if not fullOverlap and totalNegative < 1000 and iou < 0.01 and \
+		if not fullOverlap and totalNegative < 1000 and iou > 0.01 and iou < 0.1 and \
 			negativeROIs <= config.MAX_NEGATIVE:
 			# extract the ROI and then derive the output path to
 			# the negative instance
+			#print(iou)
 			roi = image[propStartY:propEndY, propStartX:propEndX]
 			filename = "{}.png".format(totalNegative)
+			#cv2.imshow(filename, roi)
+			#cv2.waitKey(0)
 			outputPath = os.path.sep.join([config.NEGATIVE_PATH, filename])
 
 			# increment the negative counters

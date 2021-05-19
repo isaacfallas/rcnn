@@ -22,7 +22,7 @@ MAX_PROPOSALS_INFER = 400
 
 # define the maximum number of positive and negative images to be
 # generated from each image
-MAX_POSITIVE = 1000
+MAX_POSITIVE = 100
 MAX_NEGATIVE = 100
 
 # initialize the input dimensions to the network
