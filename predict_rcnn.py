@@ -30,7 +30,7 @@ clone = image.copy()
 print("[INFO] running selective search...")
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
-ss.switchToSelectiveSearchFast()
+ss.switchToSelectiveSearchQuality()
 rects = ss.process()
 
 proposals = []
@@ -67,7 +67,7 @@ print("[INFO] applying NMS...")
 labels = lb.classes_[np.argmax(proba, axis=1)]
 #print(labels)
 #print(type(labels))
-idxs = np.where(labels == 'circ')[0]
+idxs = np.where(labels == 'cell')[0]
 #print(idxs)
 
 boxes = boxes[idxs]
@@ -88,9 +88,9 @@ for (box, prob) in zip(boxes, proba):
 	# draw the bounding box, label, and probability on the image
 	(startX, startY, endX, endY) = box
 	cv2.rectangle(clone, (startX, startY), (endX, endY),
-		(0, 255, 0), 2)
+		(0, 255, 255), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
-	text= "Ant: {:.2f}%".format(prob * 100)
+	text= "Cell: {:.2f}%".format(prob * 100)
 	cv2.putText(clone, text, (startX, y),
 		cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
 
@@ -105,9 +105,9 @@ for i in boxIdxs:
 	# draw the bounding box, label, and probability on the image
 	(startX, startY, endX, endY) = boxes[i]
 	cv2.rectangle(image, (startX, startY), (endX, endY),
-		(0, 255, 0), 2)
+		(0, 255, 255), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
-	text= "Ant: {:.2f}%".format(proba[i] * 100)
+	text= "Cell: {:.2f}%".format(proba[i] * 100)
 	cv2.putText(image, text, (startX, y),
 		cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
 
