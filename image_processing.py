@@ -12,15 +12,13 @@ clahe = cv2.createCLAHE(clipLimit=24, tileGridSize=(8,8))
 
 for (i, imagePath) in enumerate(imagePaths):
 
-    img = cv2.imread(imagePath,0)
+    filename = imagePath.split(os.path.sep)[-1]
 
-    #cl1 = clahe.apply(img)
+    img = cv2.imread(imagePath,0)
 
     blur = cv2.medianBlur(img, 1)
     dst = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 41, 15)
     dst = cv2.medianBlur(dst, 9)
-
-    filename = "cells_{}.png".format(i+1)
 
     outPath = os.path.sep.join([config.ORIG_IMAGES_THRESHOLD, filename])
 

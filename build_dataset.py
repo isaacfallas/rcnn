@@ -28,6 +28,7 @@ for (i, imagePath) in enumerate(imagePaths):
 
 	# extract the filename from the file path and use it to derive
 	# the path to the XML annotation file
+	print(imagePath)
 	filename = imagePath.split(os.path.sep)[-1]
 	filename = filename[:filename.rfind(".")]
 	annotPath = os.path.sep.join([config.ORIG_ANNOTS,

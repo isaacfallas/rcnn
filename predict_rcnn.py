@@ -23,6 +23,7 @@ lb = pickle.loads(open(config.ENCODER_PATH, "rb").read())
 
 # load the input image from disk
 image = cv2.imread(args["image"])
+image_grayscale = cv2.imread(args["image"],0)
 #image = imutils.resize(image, width=500)
 
 clone = image.copy()
@@ -100,17 +101,23 @@ cv2.imshow("Before NMS", clone)
 # run non-maxima suppression on the bounding boxes
 boxIdxs = non_max_suppression(boxes, proba)
 
+blur = cv2.medianBlur(image_grayscale, 1)
+imageThrs = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 41, 15)
+imageThrs = cv2.medianBlur(imageThrs, 9)
+imageThrs = cv2.cvtColor(imageThrs, cv2.COLOR_GRAY2BGR)
+
 # loop over the bounding box indexes
 for i in boxIdxs:
 	# draw the bounding box, label, and probability on the image
 	(startX, startY, endX, endY) = boxes[i]
-	cv2.rectangle(image, (startX, startY), (endX, endY),
-		(0, 255, 255), 2)
+	cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 255), 2)
+	cv2.rectangle(imageThrs, (startX, startY), (endX, endY), (0, 255, 255), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
 	text= "Cell: {:.2f}%".format(proba[i] * 100)
-	cv2.putText(image, text, (startX, y),
-		cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
+	cv2.putText(image, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
+	cv2.putText(imageThrs, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
 
 # show the output image *after* running NMS
 cv2.imshow("After NMS", image)
+cv2.imshow("Threshold", imageThrs)
 cv2.waitKey(0)
