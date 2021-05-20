@@ -88,12 +88,10 @@ proba = proba[idxs]
 for (box, prob) in zip(boxes, proba):
 	# draw the bounding box, label, and probability on the image
 	(startX, startY, endX, endY) = box
-	cv2.rectangle(clone, (startX, startY), (endX, endY),
-		(0, 255, 255), 2)
+	cv2.rectangle(clone, (startX, startY), (endX, endY), (0, 255, 255), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
 	text= "Cell: {:.2f}%".format(prob * 100)
-	cv2.putText(clone, text, (startX, y),
-		cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
+	cv2.putText(clone, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 255), 2)
 
 # show the output after *before* running NMS
 cv2.imshow("Before NMS", clone)
@@ -111,11 +109,11 @@ for i in boxIdxs:
 	# draw the bounding box, label, and probability on the image
 	(startX, startY, endX, endY) = boxes[i]
 	cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 255), 2)
-	cv2.rectangle(imageThrs, (startX, startY), (endX, endY), (0, 255, 255), 2)
+	cv2.rectangle(imageThrs, (startX, startY), (endX, endY), (164, 73, 163), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
 	text= "Cell: {:.2f}%".format(proba[i] * 100)
-	cv2.putText(image, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
-	cv2.putText(imageThrs, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
+	cv2.putText(image, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 255), 2)
+	cv2.putText(imageThrs, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (164, 73, 163), 2)
 
 # show the output image *after* running NMS
 cv2.imshow("After NMS", image)

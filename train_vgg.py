@@ -35,7 +35,7 @@ import os
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--plot", type=str, default="plots/plot_1.png",
+ap.add_argument("-p", "--plot", type=str, default="plots/plot_4.png",
 	help="path to output loss/accuracy plot")
 args = vars(ap.parse_args())
 
@@ -93,7 +93,7 @@ model = SmallVGGNet.build(width=64, height=64, depth=3,
 # initialize our initial learning rate, # of epochs to train for,
 # and batch size
 INIT_LR = 0.01
-EPOCHS = 20
+EPOCHS = 30
 BS = 32
 
 # initialize the model and optimizer (you'll want to use
