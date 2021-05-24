@@ -11,6 +11,7 @@ from sklearn.metrics import classification_report
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.optimizers import Adam
 from imutils import paths
 import matplotlib.pyplot as plt
 import numpy as np
@@ -35,7 +36,7 @@ import os
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--plot", type=str, default="plots/plot_4.png",
+ap.add_argument("-p", "--plot", type=str, default="plots/plot_5.png",
 	help="path to output loss/accuracy plot")
 args = vars(ap.parse_args())
 
@@ -92,14 +93,15 @@ model = SmallVGGNet.build(width=64, height=64, depth=3,
 
 # initialize our initial learning rate, # of epochs to train for,
 # and batch size
-INIT_LR = 0.01
-EPOCHS = 30
+INIT_LR = 1e-4
+EPOCHS = 75
 BS = 32
 
 # initialize the model and optimizer (you'll want to use
 # binary_crossentropy for 2-class classification)
 print("[INFO] training network...")
-opt = SGD(lr=INIT_LR, decay=INIT_LR / EPOCHS)
+# opt = SGD(lr=INIT_LR, decay=INIT_LR / EPOCHS)
+opt = Adam(lr=INIT_LR)
 model.compile(loss="binary_crossentropy", optimizer=opt,
 	metrics=["accuracy"])
 

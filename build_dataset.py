@@ -86,7 +86,7 @@ for (i, imagePath) in enumerate(imagePaths):
 	negativeROIs = 0
 
 	# loop over the maximum number of region proposals
-	for proposedRect in proposedRects[:config.MAX_PROPOSALS]:
+	for proposedRect in proposedRects:
 		# unpack the proposed rectangle bounding box
 		(propStartX, propStartY, propEndX, propEndY) = proposedRect
 

@@ -31,7 +31,7 @@ clone = image.copy()
 print("[INFO] running selective search...")
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
-ss.switchToSelectiveSearchQuality()
+ss.switchToSelectiveSearchFast()
 rects = ss.process()
 
 proposals = []

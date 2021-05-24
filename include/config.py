@@ -18,20 +18,20 @@ NEGATIVE_PATH = os.path.sep.join([BASE_PATH, "no_cell"])
 # define the number of max proposals used when running selective
 # search for (1) gathering training data and (2) performing inference
 MAX_PROPOSALS = 3000
-MAX_PROPOSALS_INFER = 1000
+MAX_PROPOSALS_INFER = 400
 
 # define the maximum number of positive and negative images to be
 # generated from each image
 MAX_POSITIVE = 100
-MAX_NEGATIVE = 100
+MAX_NEGATIVE = 70
 
 # initialize the input dimensions to the network
 INPUT_DIMS = (64, 64)
 
 # define the path to the output model and label binarizer
 
-MODEL_NAME = 'cells_detector.h5'
-ENCODER_NAME = 'cells_label_encoder.pickle'
+MODEL_NAME = 'cells_detector_v1.h5'
+ENCODER_NAME = 'cells_label_encoder_v1.pickle'
 
 MODEL_RCNN = 'model_rcnn'
 LABEL_ENCODER = 'label_encoder'
@@ -44,4 +44,4 @@ ENCODER_PATH = os.path.sep.join([LABEL_ENCODER, ENCODER_NAME])
 
 # define the minimum probability required for a positive prediction
 # (used to filter out false-positive predictions)
-MIN_PROBA = 0.1
+MIN_PROBA = 0.9
