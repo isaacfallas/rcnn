@@ -31,7 +31,7 @@ clone = image.copy()
 print("[INFO] running selective search...")
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
-ss.switchToSelectiveSearchFast()
+ss.switchToSelectiveSearchQuality()
 rects = ss.process()
 
 proposals = []
@@ -91,10 +91,11 @@ for (box, prob) in zip(boxes, proba):
 	cv2.rectangle(clone, (startX, startY), (endX, endY), (0, 255, 255), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
 	text= "Cell: {:.2f}%".format(prob * 100)
-	cv2.putText(clone, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 255), 2)
+	#cv2.putText(clone, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 255), 2)
 
 # show the output after *before* running NMS
-cv2.imshow("Before NMS", clone)
+# cv2.imshow("Before NMS", clone)
+cv2.imwrite("Before_NMS.jpg", clone)
 
 # run non-maxima suppression on the bounding boxes
 boxIdxs = non_max_suppression(boxes, proba)
@@ -112,10 +113,14 @@ for i in boxIdxs:
 	cv2.rectangle(imageThrs, (startX, startY), (endX, endY), (164, 73, 163), 2)
 	y = startY - 10 if startY - 10 > 10 else startY + 10
 	text= "Cell: {:.2f}%".format(proba[i] * 100)
-	cv2.putText(image, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 255), 2)
-	cv2.putText(imageThrs, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (164, 73, 163), 2)
+	#cv2.putText(image, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 255), 2)
+	#cv2.putText(imageThrs, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (164, 73, 163), 2)
 
 # show the output image *after* running NMS
-cv2.imshow("After NMS", image)
-cv2.imshow("Threshold", imageThrs)
-cv2.waitKey(0)
+# cv2.imshow("After NMS", image)
+# cv2.imshow("Threshold", imageThrs)
+
+cv2.imwrite("After_NMS.jpg", image)
+cv2.imwrite("Threshold.jpg", imageThrs)
+
+# cv2.waitKey(0)

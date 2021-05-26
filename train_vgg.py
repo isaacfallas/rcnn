@@ -36,7 +36,7 @@ import os
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--plot", type=str, default="plots/plot_5.png",
+ap.add_argument("-p", "--plot", type=str, default="plots/plot_7.png",
 	help="path to output loss/accuracy plot")
 args = vars(ap.parse_args())
 
@@ -93,15 +93,15 @@ model = SmallVGGNet.build(width=64, height=64, depth=3,
 
 # initialize our initial learning rate, # of epochs to train for,
 # and batch size
-INIT_LR = 1e-4
+INIT_LR = 1e-3
 EPOCHS = 75
 BS = 32
 
 # initialize the model and optimizer (you'll want to use
 # binary_crossentropy for 2-class classification)
 print("[INFO] training network...")
-# opt = SGD(lr=INIT_LR, decay=INIT_LR / EPOCHS)
-opt = Adam(lr=INIT_LR)
+opt = SGD(lr=INIT_LR, decay=INIT_LR / EPOCHS)
+#opt = Adam(lr=INIT_LR)
 model.compile(loss="binary_crossentropy", optimizer=opt,
 	metrics=["accuracy"])
 
